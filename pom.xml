@@ -6,7 +6,7 @@
     <groupId>com.stus</groupId>
     <artifactId>meals</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>meals</name>
     <description>Demo project for Spring Boot</description>

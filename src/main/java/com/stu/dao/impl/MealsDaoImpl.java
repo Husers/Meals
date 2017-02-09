@@ -1,8 +1,10 @@
 package com.stu.dao.impl;
 
-import com.stu.dao.MealsDao;
 import com.stu.dao.BaseDao;
+import com.stu.dao.MealsDao;
 import com.stu.model.Meals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileInputStream;
@@ -16,22 +18,21 @@ import java.util.Properties;
  */
 @Repository
 public class MealsDaoImpl extends BaseDao implements MealsDao {
+    private final Logger logger = LoggerFactory.getLogger(MealsDaoImpl.class);
 
     @Override
     public void updateMeals(Meals meals) throws IOException {
         Properties properties = new Properties();
-        properties.load(new FileInputStream(getPath()));
+        FileInputStream fis = new FileInputStream(getPath());
+        properties.load(fis);
         if (properties.containsKey(meals.getOwner())) {
             properties.setProperty(meals.getOwner(), String.valueOf(Float.valueOf(properties.getProperty(meals.getOwner())) - Float.valueOf(meals.getBalance())));
-            System.out.println(properties.getProperty(meals.getOwner()));
         } else {
-            System.err.println("没有这个用户！");
+            logger.warn("没有这个用户！");
         }
         FileOutputStream fos = new FileOutputStream(getPath());
         properties.store(fos, "Update properties");
-    }
-
-    public static void main(String[] args) {
-        MealsDaoImpl dao = new MealsDaoImpl();
+        fos.close();
+        fis.close();
     }
 }
