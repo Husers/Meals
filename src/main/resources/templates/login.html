@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择用户</title>
+    <link rel="stylesheet" href="css/flat-ui.css"/>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile.structure-1.3.0.min.css"/>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+</head>
+<body>
+<div data-role="page" data-theme="a">
+    <div data-role="header" data-position="fixed" data-theme="b">
+        <h1>登录</h1>
+    </div><!-- /header -->
+
+    <div data-role="content">
+        <div data-role="fieldcontain" data-content-theme="b">
+            <fieldset data-role="controlgroup" data-theme="b">
+                <legend>选择用户:</legend>
+                <input type="radio" name="radio-choice-1" id="radio-choice-1c" value="huliang" data-theme="b"/>
+                <label for="radio-choice-1c">胡亮</label>
+                <input type="radio" name="radio-choice-1" id="radio-choice-3c" value="lifaqiang" data-theme="b"/>
+                <label for="radio-choice-3c">李发强</label>
+                <input type="radio" name="radio-choice-1" id="radio-choice-2c" value="niechao" data-theme="b"/>
+                <label for="radio-choice-2c">聂超</label>
+                <input type="radio" name="radio-choice-1" id="radio-choice-4c" value="shenzhen" data-theme="b"/>
+                <label for="radio-choice-4c">沈圳</label>
+                <input type="radio" name="radio-choice-1" id="radio-choice-5c" value="zhouxueqing" data-theme="b"/>
+                <label for="radio-choice-5c">周雪晴</label>
+            </fieldset>
+            <br>
+            <a id="login" href="#" data-role="button" data-theme="b">登录</a>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        $("#login").click(
+            function () {
+                var urlz = $("input[name^='radio-choice-']:checked").val();
+                if (urlz != null) {
+                    location.href = window.location.pathname + "/" + urlz;
+                }
+            }
+        );
+    })
+</script>
+</html>

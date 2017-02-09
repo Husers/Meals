@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Meals</title>
+    <link rel="stylesheet" th:href="@{/css/flat-ui.css}"/>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile.structure-1.3.0.min.css"/>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+</head>
+<body>
+<div data-role="page" data-theme="a">
+    <div data-role="header" data-position="fixed" data-theme="b">
+        <h1>胡亮</h1>
+    </div>
+    <div data-role="content">
+        <div id="success" style="color: green;display: none">成功扣款！</div>
+        <div id="err" style="color: red;display: none">扣款失败！</div>
+        <div class="ui-body">
+            <h3 style="text-align: center">2016年12月15日</h3>
+        </div>
+        <div data-role="fieldcontain">
+            <label for="name-c">本次用餐消费:</label>
+            <input type="text" name="name" id="name-c" value=""/>
+        </div>
+        <a id="update" href="#" data-role="button" data-theme="b">提交餐费</a>
+    </div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#" data-icon="shop" class="ui-btn-active ui-state-persist">消费</a></li>
+                <li><a href="#" data-icon="refresh">钱包</a></li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#" data-icon="gear" class="ui-btn-active ui-state-persist">消费</a></li>
+                <li><a href="#" data-icon="refresh">钱包</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        $("#update").click(function () {
+            $.get(window.location.pathname + "/update", {balance: $('#name-c').val()}, function (data) {
+                var status = JSON.parse(data).status;
+                if (status == '200') {
+                    $("#success").css("display", "");
+                    setTimeout(function () {
+                        $("#success").css("display", "none")
+                    }, 2000)
+                } else {
+                    $("#err").css("display", "");
+                    setTimeout(function () {
+                        $("#err").css("display", "none")
+                    }, 2000)
+                }
+            });
+        })
+    })
+</script>
+</html>
