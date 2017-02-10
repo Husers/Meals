@@ -22,7 +22,12 @@ public class MealsServiceImpl implements MealsService {
     }
 
     @Override
-    public void updateMeals(Meals meals) throws IOException {
-        dao.updateMeals(meals);
+    public String updateMeals(Meals meals) throws IOException {
+        return dao.updateMeals(meals);
+    }
+
+    @Override
+    public String selectMeals(String owner) throws IOException {
+        return dao.selectMeals(owner);
     }
 }

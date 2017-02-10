@@ -14,31 +14,36 @@
     <div data-role="header" data-position="fixed" data-theme="b">
         <h1>餐费管理</h1>
     </div>
-    <div data-role="content">
-        <div id="success" style="color: green;display: none">成功扣款！</div>
-        <div id="err" style="color: red;display: none">扣款失败！</div>
+    <div id="minus-success" style="color: green;display: none;text-align: center">成功扣款！</div>
+    <div id="minus-err" style="color: red;display: none;text-align: center">扣款失败！</div>
+    <div id="plus-success" style="color: green;display: none;text-align: center">充值成功！</div>
+    <div id="plus-err" style="color: red;display: none;text-align: center">充值失败！</div>
+    <div id="left" data-role="content">
         <div class="ui-body">
-            <h3 style="text-align: center">2016年12月15日</h3>
+            <h3 id="date" style="text-align: center"></h3>
         </div>
         <div data-role="fieldcontain">
             <label for="name-c">本次用餐消费:</label>
             <input type="text" name="name" id="name-c" value=""/>
         </div>
-        <a id="update" href="#" data-role="button" data-theme="b">提交餐费</a>
+        <a id="minus" href="#" data-role="button" data-theme="b">提交餐费</a>
     </div>
-    <div data-role="footer" data-position="fixed" data-theme="b">
-        <div data-role="navbar">
-            <ul>
-                <li><a href="#" data-icon="shop" class="ui-btn-active ui-state-persist">消费</a></li>
-                <li><a href="#" data-icon="refresh">钱包</a></li>
-            </ul>
+    <div id="right" data-role="content" style="display: none">
+        <div class="ui-body">
+            <!--/*@thymesVar id="balance" type="java.lang.String"*/-->
+            <h3 id="balance" style="text-align: center" th:text="'余额：'+${balance}"></h3>
         </div>
+        <div data-role=" fieldcontain">
+            <label for="name-a">本次充值金额:</label>
+            <input type="text" name="name" id="name-a" value=""/>
+        </div>
+        <a id="plus" href="#" data-role="button" data-theme="b">确认冲值</a>
     </div>
     <div data-role="footer" data-position="fixed" data-theme="b">
         <div data-role="navbar">
             <ul>
-                <li><a href="#" data-icon="gear" class="ui-btn-active ui-state-persist">消费</a></li>
-                <li><a href="#" data-icon="refresh">钱包</a></li>
+                <li><a id="left-bar" href="#" data-icon="home" class="ui-btn-active ui-state-persist">消费</a></li>
+                <li><a id="right-bar" href="#" data-icon="refresh">钱包</a></li>
             </ul>
         </div>
     </div>
@@ -46,18 +51,44 @@
 </body>
 <script>
     $(function () {
-        $("#update").click(function () {
-            $.get(window.location.pathname + "/update", {balance: $('#name-c').val()}, function (data) {
+        $("#date").html((new Date()).toDateString());
+        $("#left-bar").click(function () {
+            $("#left").css("display", "");
+            $("#right").css("display", "none")
+        });
+        $("#right-bar").click(function () {
+            $("#right").css("display", "");
+            $("#left").css("display", "none")
+        });
+        $("#minus").click(function () {
+            $.get(window.location.pathname + "/minus", {balance: $('#name-c').val()}, function (data) {
                 var status = JSON.parse(data).status;
                 if (status == '200') {
-                    $("#success").css("display", "");
+                    $("#minus-success").css("display", "");
                     setTimeout(function () {
-                        $("#success").css("display", "none")
+                        $("#minus-success").css("display", "none")
                     }, 2000)
                 } else {
-                    $("#err").css("display", "");
+                    $("#minus-err").css("display", "");
                     setTimeout(function () {
-                        $("#err").css("display", "none")
+                        $("#minus-err").css("display", "none")
+                    }, 2000)
+                }
+            });
+        });
+        $("#plus").click(function () {
+            $.get(window.location.pathname + "/plus", {balance: $('#name-a').val()}, function (data) {
+                if (!data) {
+                    $("#plus-err").css("display", "");
+                    setTimeout(function () {
+                        $("#plus-err").css("display", "none")
+                    }, 2000)
+                } else {
+                    $("#balance").html(JSON.parse(data).balance);
+                    console.info(JSON.parse(data).balance);
+                    $("#plus-success").css("display", "");
+                    setTimeout(function () {
+                        $("#plus-success").css("display", "none")
                     }, 2000)
                 }
             });

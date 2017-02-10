@@ -29,17 +29,34 @@ public class MealsController {
         this.meals = meals;
     }
 
-    @RequestMapping(value = "/925659/{owner}/update")
+    @RequestMapping(value = "/925659/{owner}/minus")
     @ResponseBody
-    public String updateMeals(@PathVariable("owner") String owner, @RequestParam(value = "balance") String balance) {
+    public String minusMeals(@PathVariable("owner") String owner, @RequestParam(value = "balance") String balance) {
         meals.setOwner(owner);
         meals.setBalance(balance);
-        logger.info(owner + "消费了" + balance);
         try {
             service.updateMeals(meals);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.info(owner + "消费了" + balance);
         return "{\"status\":\"200\"}";
+    }
+
+    @RequestMapping(value = "/925659/{owner}/plus")
+    @ResponseBody
+    public String plusMeals(@PathVariable("owner") String owner, @RequestParam(value = "balance") String balance) {
+        System.err.println(balance);
+        meals.setOwner(owner);
+        meals.setBalance("-" + balance);
+        String balanceT = null;
+        try {
+            balanceT = service.updateMeals(meals);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        logger.info(owner + "充值了" + balance);
+        logger.debug(balanceT);
+        return "{\"balance\":\"" + balanceT + "\"}";
     }
 }

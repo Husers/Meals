@@ -9,5 +9,6 @@ import java.io.IOException;
  * On 17/2/8.
  */
 public interface MealsService {
-    void updateMeals(Meals meals) throws IOException;
+    String updateMeals(Meals meals) throws IOException;
+    String selectMeals(String owner) throws IOException;
 }

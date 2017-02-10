@@ -1,7 +1,13 @@
 package com.stu.web;
 
+import com.stu.service.MealsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 
 /**
  * Created by huser
@@ -9,6 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class IndexController {
+    private final MealsService service;
+
+    @Autowired
+    public IndexController(MealsService service) {
+        this.service = service;
+    }
+
     @RequestMapping("/")
     public String index() {
         return "index";
@@ -19,8 +32,14 @@ public class IndexController {
         return "login";
     }
 
-    @RequestMapping("/925659/*")
-    public String meals() {
-        return "meals";
+    @RequestMapping("/925659/{owner}")
+    public ModelAndView meals(@PathVariable("owner") String owner) {
+        String balance = null;
+        try {
+            balance = service.selectMeals(owner);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ModelAndView("meals", "balance", balance);
     }
 }

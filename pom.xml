@@ -36,6 +36,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!--Spring 官方提供的热部署插件 -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
             <version>1.9.22</version>

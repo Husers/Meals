@@ -2,7 +2,6 @@ package com.stu.dao;
 
 import com.stu.model.Meals;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -10,5 +9,6 @@ import java.io.IOException;
  * On 17/2/8.
  */
 public interface MealsDao {
-    void updateMeals(Meals meals) throws IOException;
+    String updateMeals(Meals meals) throws IOException;
+    String selectMeals(String owner) throws IOException;
 }
