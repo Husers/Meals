@@ -10,5 +10,5 @@ import java.io.IOException;
  * On 17/2/8.
  */
 public interface MealsDao {
-    public void updateMeals(Meals meals) throws IOException;
+    void updateMeals(Meals meals) throws IOException;
 }
