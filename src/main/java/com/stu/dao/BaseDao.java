@@ -6,6 +6,6 @@ package com.stu.dao;
  */
 public class BaseDao {
     protected String getPath() {
-        return BaseDao.class.getResource("/data/data.properties").toString().substring(6).replaceAll("%20", " ");
+        return BaseDao.class.getResource("/data/data.properties").getPath().replaceAll("%20", " ");
     }
 }

@@ -1,17 +1,33 @@
 package com.stu.dao.impl;
 
-import org.junit.Test;
+import com.stu.Base;
 
-import static org.junit.Assert.*;
+import com.stu.dao.MealsDao;
+import com.stu.model.Meals;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by huser
- * On 17/2/8.
+ * On 17/2/12.
  */
-public class MealsDaoImplTest {
+public class MealsDaoImplTest extends Base {
+    @Autowired
+    private MealsDao dao;
+    @Autowired
+    private Meals model;
     @Test
-    public void updateMeals() throws Exception {
-        MealsDaoImpl dao = new MealsDaoImpl();
+    public void selectMealsByOwner() throws Exception {
+
+    }
+
+    @Test
+    public void updateMealsByOwner() throws Exception {
+        model.setOwner("huliang");
+        model.setBalance("20");
+        System.err.println(dao.selectMealsByOwner(model.getOwner()));
+        dao.updateMealsByOwner(model);
+        System.err.println(dao.selectMealsByOwner(model.getOwner()));
     }
 
 }

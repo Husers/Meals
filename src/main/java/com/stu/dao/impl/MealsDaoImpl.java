@@ -1,53 +1,75 @@
 package com.stu.dao.impl;
 
+
 import com.stu.dao.BaseDao;
 import com.stu.dao.MealsDao;
 import com.stu.model.Meals;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
 /**
  * Created by huser
- * On 17/2/8.
+ * On 17/2/12.
+ * 修改后的Dao层只做数据的读取和写入，涉及计算部分应放在Service层
  */
 @Repository
 public class MealsDaoImpl extends BaseDao implements MealsDao {
-    private final Logger logger = LoggerFactory.getLogger(MealsDaoImpl.class);
-
     @Override
-    public String updateMeals(Meals meals) throws IOException {
+    public String selectMealsByOwner(String owner) {
         Properties properties = new Properties();
-        FileInputStream fis = new FileInputStream(getPath());
-        properties.load(fis);
-        if (properties.containsKey(meals.getOwner())) {
-            System.err.println(meals.getBalance());
-            if (meals.getBalance().indexOf("-") == 0) {
-                properties.setProperty(meals.getOwner(), String.valueOf(Float.valueOf(properties.getProperty(meals.getOwner()))
-                        + Float.valueOf((meals.getBalance()).substring(1, meals.getBalance().length()))));
-            } else {
-                properties.setProperty(meals.getOwner(), String.valueOf(Float.valueOf(properties.getProperty(meals.getOwner())) - Float.valueOf(meals.getBalance())));
+        FileReader reader = null;
+        String balance = null;
+        try {
+            reader = new FileReader(getPath());
+            properties.load(reader);
+            balance = properties.getProperty(owner);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } else {
-            logger.warn("没有这个用户！");
         }
-        FileOutputStream fos = new FileOutputStream(getPath());
-        properties.store(fos, "Update properties");
-        fos.close();
-        fis.close();
-        return properties.getProperty(meals.getOwner());
+        return balance;
     }
 
     @Override
-    public String selectMeals(String owner) throws IOException {
+    public void updateMealsByOwner(Meals meals) {
         Properties properties = new Properties();
-        FileInputStream fis = new FileInputStream(getPath());
-        properties.load(fis);
-        return properties.getProperty(owner);
+        FileReader reader = null;
+        FileWriter writer = null;
+        try {
+            reader = new FileReader(getPath());
+            properties.load(reader);
+            properties.setProperty(meals.getOwner(), meals.getBalance());
+            //必须在properties修改完参数之后再读取输入流，否则写入的还是原来的内容
+            writer = new FileWriter(getPath());
+            properties.store(writer, meals.getOwner() + " Update properties");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
