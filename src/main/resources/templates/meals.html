@@ -24,7 +24,7 @@
         </div>
         <div data-role="fieldcontain">
             <label for="name-c">本次用餐消费:</label>
-            <input type="text" name="name" id="name-c" value=""/>
+            <input type="text" name="name" id="name-c" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" value=""/>
         </div>
         <a id="minus" href="#" data-role="button" data-theme="b">提交餐费</a>
     </div>
@@ -35,7 +35,7 @@
         </div>
         <div data-role=" fieldcontain">
             <label for="name-a">本次充值金额:</label>
-            <input type="text" name="name" id="name-a" value=""/>
+            <input type="text" name="name" id="name-a" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" value=""/>
         </div>
         <a id="plus" href="#" data-role="button" data-theme="b">确认冲值</a>
     </div>

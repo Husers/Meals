@@ -34,12 +34,7 @@ public class IndexController {
 
     @RequestMapping("/925659/{owner}")
     public ModelAndView meals(@PathVariable("owner") String owner) {
-        String balance = null;
-        try {
-            balance = service.selectMeals(owner);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String balance = service.selectMeals(owner);
         return new ModelAndView("meals", "balance", balance);
     }
 }
