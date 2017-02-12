@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-
 /**
  * Created by huser
  * On 17/2/8.
@@ -34,29 +32,26 @@ public class MealsController {
     public String minusMeals(@PathVariable("owner") String owner, @RequestParam(value = "balance") String balance) {
         meals.setOwner(owner);
         meals.setBalance(balance);
-        try {
-            service.updateMeals(meals);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String balanceT = service.updateMeals(meals);
+        if ( balanceT!= null) {
+            logger.info(owner + " 消费了" + balance);
+        } else {
+            logger.warn(owner + " 扣款失败，没有这个用户");
         }
-        logger.info(owner + "消费了" + balance);
-        return "{\"status\":\"200\"}";
+        return "{\"balance\":\"" + balanceT + "\"}";
     }
 
     @RequestMapping(value = "/925659/{owner}/plus")
     @ResponseBody
     public String plusMeals(@PathVariable("owner") String owner, @RequestParam(value = "balance") String balance) {
-        System.err.println(balance);
         meals.setOwner(owner);
         meals.setBalance("-" + balance);
-        String balanceT = null;
-        try {
-            balanceT = service.updateMeals(meals);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String balanceT = service.updateMeals(meals);
+        if (balanceT != null) {
+            logger.info(owner + " 充值了" + balance);
+        } else {
+            logger.warn(owner + " 充值失败，没有这个用户");
         }
-        logger.info(owner + "充值了" + balance);
-        logger.debug(balanceT);
         return "{\"balance\":\"" + balanceT + "\"}";
     }
 }

@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Meals</title>
     <link rel="stylesheet" th:href="@{/css/flat-ui.css}"/>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile.structure-1.3.0.min.css"/>
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/jquery.mobile.structure-1.3.0.min.css}"/>
+    <script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+    <script th:src="@{/js/jquery.mobile-1.3.0.min.js}"></script>
 </head>
 <body>
 <div data-role="page" data-theme="a">
@@ -24,7 +24,9 @@
         </div>
         <div data-role="fieldcontain">
             <label for="name-c">本次用餐消费:</label>
-            <input type="text" name="name" id="name-c" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" value=""/>
+            <!--自动删掉非数字字符-->
+            <input type="text" name="name" id="name-c" onkeyup="value=value.replace(/[^\d.\d|\d]/g,'')"
+                   value=""/>
         </div>
         <a id="minus" href="#" data-role="button" data-theme="b">提交餐费</a>
     </div>
@@ -35,7 +37,9 @@
         </div>
         <div data-role=" fieldcontain">
             <label for="name-a">本次充值金额:</label>
-            <input type="text" name="name" id="name-a" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" value=""/>
+            <!--自动删掉非数字字符-->
+            <input type="text" name="name" id="name-a" onkeyup="value=value.replace(/[^\d.\d|\d]/g,'')"
+                   value=""/>
         </div>
         <a id="plus" href="#" data-role="button" data-theme="b">确认冲值</a>
     </div>
@@ -52,30 +56,34 @@
 <script>
     $(function () {
         $("#date").html((new Date()).toDateString());
+        //显示消费页面
         $("#left-bar").click(function () {
             $("#left").css("display", "");
             $("#right").css("display", "none")
         });
+        //显示钱包页面
         $("#right-bar").click(function () {
             $("#right").css("display", "");
             $("#left").css("display", "none")
         });
+        //消费
         $("#minus").click(function () {
             $.get(window.location.pathname + "/minus", {balance: $('#name-c').val()}, function (data) {
-                var status = JSON.parse(data).status;
-                if (status == '200') {
-                    $("#minus-success").css("display", "");
-                    setTimeout(function () {
-                        $("#minus-success").css("display", "none")
-                    }, 2000)
-                } else {
+                if (!data) {
                     $("#minus-err").css("display", "");
                     setTimeout(function () {
                         $("#minus-err").css("display", "none")
                     }, 2000)
+                } else {
+                    $("#balance").html(JSON.parse(data).balance);
+                    $("#minus-success").css("display", "");
+                    setTimeout(function () {
+                        $("#minus-success").css("display", "none")
+                    }, 2000)
                 }
             });
         });
+        //充值
         $("#plus").click(function () {
             $.get(window.location.pathname + "/plus", {balance: $('#name-a').val()}, function (data) {
                 if (!data) {
@@ -85,7 +93,6 @@
                     }, 2000)
                 } else {
                     $("#balance").html(JSON.parse(data).balance);
-                    console.info(JSON.parse(data).balance);
                     $("#plus-success").css("display", "");
                     setTimeout(function () {
                         $("#plus-success").css("display", "none")

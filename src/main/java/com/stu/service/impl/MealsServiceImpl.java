@@ -7,7 +7,6 @@ import com.stu.service.MealsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
@@ -24,12 +23,15 @@ public class MealsServiceImpl implements MealsService {
     }
 
     @Override
-    public String updateMeals(Meals meals){
-        BigDecimal balance = new BigDecimal(dao.selectMealsByOwner(meals.getOwner()));
-        BigDecimal balanceC = new BigDecimal(meals.getBalance());
-        String balanceNew = String.valueOf(balance.subtract(balanceC));
-        meals.setBalance(balanceNew);
-        dao.updateMealsByOwner(meals);
+    public String updateMeals(Meals meals) {
+        String balanceNew = null;
+        if (dao.selectOwner(meals.getOwner())) {
+            BigDecimal balance = new BigDecimal(dao.selectMealsByOwner(meals.getOwner()));
+            BigDecimal balanceC = new BigDecimal(meals.getBalance());
+            balanceNew = String.valueOf(balance.subtract(balanceC));
+            meals.setBalance(balanceNew);
+            dao.updateMealsByOwner(meals);
+        }
         return balanceNew;
     }
 

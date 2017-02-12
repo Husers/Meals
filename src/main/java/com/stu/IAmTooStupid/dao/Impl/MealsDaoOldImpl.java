@@ -1,7 +1,7 @@
 package com.stu.IAmTooStupid.dao.Impl;
 
-import com.stu.dao.BaseDao;
 import com.stu.IAmTooStupid.dao.MealsDaoOld;
+import com.stu.dao.BaseDao;
 import com.stu.model.Meals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

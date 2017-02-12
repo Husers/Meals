@@ -72,4 +72,27 @@ public class MealsDaoImpl extends BaseDao implements MealsDao {
             }
         }
     }
+
+    @Override
+    public boolean selectOwner(String owner) {
+        Properties properties = new Properties();
+        FileReader reader = null;
+        boolean result = false;
+        try {
+            reader = new FileReader(getPath());
+            properties.load(reader);
+            result = properties.containsKey(owner);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
 }

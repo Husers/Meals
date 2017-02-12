@@ -10,4 +10,6 @@ public interface MealsDao {
     String selectMealsByOwner(String owner);
 
     void updateMealsByOwner(Meals meals);
+
+    boolean selectOwner(String owner);
 }
